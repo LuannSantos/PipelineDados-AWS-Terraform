@@ -1,0 +1,8 @@
+terraform/modules/rds/output/*.txt
+python/data_ingestion/logs/*.txt
+.env
+__pycache__
+.terraform
+.terraform.lock.hcl
+terraform.tfstate.backup
+terraform.tfstate
