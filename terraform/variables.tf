@@ -9,6 +9,11 @@ variable "db_password" {
   sensitive   = true
 }
 
+variable "bucket_names" {
+  type        = list(string)
+  description = "Lista de buckets para as camadas de dados"
+}
+
 data "http" "myip" {
   url = "http://ipv4.icanhazip.com"
 }

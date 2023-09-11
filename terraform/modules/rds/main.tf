@@ -27,7 +27,7 @@ resource "aws_db_instance" "PostgrelSQL-01" {
   skip_final_snapshot  = true
   
   # resource identifier
-  identifier = "terraform-project-rds"
+  identifier = "terraform-project-9093-rds"
   
   # Storage options
   allocated_storage    = 20

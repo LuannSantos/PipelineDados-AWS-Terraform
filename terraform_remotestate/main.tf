@@ -17,6 +17,7 @@ provider "aws" {
 
 resource "aws_s3_bucket" "remote-state" {
   bucket = "terraform-project-9093"
+  force_destroy = true
 
 }
 

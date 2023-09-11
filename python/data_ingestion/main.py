@@ -43,8 +43,8 @@ def data_ingestion():
 		        data_finalizacao_str = data_finalizacao.strftime('%Y-%m-%d %H:%M:%S.%f')
 		        log_register('Última data encontrada na página ' + data_finalizacao_str)
 		      
-		    if data_finalizacao < data_max_postgre:
-		        data_max_str = data_max_postgre.strftime('%Y-%m-%d %H:%M:%S.%f')
+		    if data_finalizacao < data_max:
+		        data_max_str = data_max.strftime('%Y-%m-%d %H:%M:%S.%f')
 		        df_temp = df_temp[df_temp.created_at > data_max_str]
 		    
 		    if len(dados) > 0:
