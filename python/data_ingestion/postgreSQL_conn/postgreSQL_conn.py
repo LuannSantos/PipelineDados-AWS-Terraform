@@ -59,7 +59,7 @@ def get_max_data():
 		conn.commit()
 
 		cursor.execute("""CREATE TABLE IF NOT EXISTS scnews.tbtabnews
-		(id VARCHAR(36) PRIMARY KEY NOT NULL ,
+		(id VARCHAR(36) NOT NULL ,
 		owner_id VARCHAR(36),
 		parent_id  VARCHAR(36),
 		slug VARCHAR(400),

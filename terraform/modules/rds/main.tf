@@ -1,16 +1,22 @@
-#https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources
+
 resource "aws_security_group" "access-rds-port" {
-  name        = "access_rds"
+  name        = "${var.project_name}-security-group-access-rds"
 
   ingress {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
     
-    # Please restrict your ingress to only necessary IPs and ports.
-    # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
-    cidr_blocks = ["${chomp(var.my_ip)}/32"]
+    cidr_blocks = ["${chomp(var.my_ip)}/32", "${var.vpc_cidr_block}"]
 
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
 }
@@ -27,7 +33,7 @@ resource "aws_db_instance" "PostgrelSQL-01" {
   skip_final_snapshot  = true
   
   # resource identifier
-  identifier = "terraform-project-9093-rds"
+  identifier = "${var.project_name}-rds"
   
   # Storage options
   allocated_storage    = 20

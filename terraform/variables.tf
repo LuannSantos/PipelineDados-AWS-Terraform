@@ -1,3 +1,8 @@
+variable "project_name" {
+  type        = string
+  description = "Nome do Projeto"
+}
+
 variable "db_username" {
   type        = string
   description = "Nome de usuário RDS"

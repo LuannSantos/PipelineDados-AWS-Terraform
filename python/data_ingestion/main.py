@@ -36,6 +36,8 @@ def data_ingestion():
 
 		    dados = resp.json()
 		    dados = [dados] if type(dados) == "<class 'dict'>" else dados
+
+		    log_register(f'Dados capturados')
 		    
 		    if len(dados) > 0:
 		        df_temp = pd.DataFrame(data = dados)
@@ -50,6 +52,20 @@ def data_ingestion():
 		    if len(dados) > 0:
 		        df = pd.concat( [df,df_temp] )
 
+		        log_register("Elimina duplicidades e lida com dados nulos")
+		        df = df.drop_duplicates(subset=['id'])
+		        df = df.replace({'None': None})
+
+		        log_register("Ingere dados na tabela do PostgreSQL")
+		        df.to_sql(name = 'tbtabnews', con= ps.conn_alch, if_exists='append', index=False, schema = 'scnews')
+
+		        ps.conn_alch.commit()
+
+		        log_register("Ingestão realizada")
+
+		        df = df.drop(df.index)
+
+
 		    params["page"] += 1
 		    
 		    
@@ -59,21 +75,6 @@ def data_ingestion():
 		log_register("Erro em requisições a API")
 		raise Exception(traceback.format_exc())
 
-	try:
-		log_register("Requisições finalizadas")
-		log_register("Elimina duplicidades e lida com dados nulos")
-		df = df.drop_duplicates(subset=['id'])
-		df = df.replace({'None': None})
-
-		log_register("Ingere dados na tabela do PostgreSQL")
-		df.to_sql(name = 'tbtabnews', con= ps.conn_alch, if_exists='append', index=False, schema = 'scnews')
-
-		ps.conn_alch.commit()
-
-		log_register("Ingestão realizada")
-	except:
-		log_register("Erro ao tentar ingerir dados no PostgreSQL")
-		raise Exception(traceback.format_exc())
 
 def scheduleJob ():
 	log_register("Aguarda inicio do job")
