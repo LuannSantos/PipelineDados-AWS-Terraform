@@ -8,7 +8,7 @@ module "dms" {
   	db_name = module.rds.db_name
   	db_address = module.rds.db_address
   	bucket_name = module.s3.bucket_name
-  	iam_arn = module.iam.iam_arn
+  	iam_arn = module.iam.iam_s3_arn
 }
 
 module "iam" {
@@ -16,6 +16,7 @@ module "iam" {
 	project_name = var.project_name
 
 	bucket_name = module.s3.bucket_name
+	replication_task_arn = module.dms.replication_task_arn
 }
 
 module "rds" {
@@ -37,4 +38,22 @@ module "s3" {
 
 module "vpc" {
 	source = "./modules/vpc"
+}
+
+module "lambda" {
+	source = "./modules/lambda"
+	project_name = var.project_name
+
+	iam_arn = module.iam.iam_dms_lambda_arn
+	event_rule_arn = module.event-bridge.event_rule_arn
+	replication_task_arn = module.dms.replication_task_arn
+
+}
+
+module "event-bridge" {
+	source = "./modules/event_bridge"
+	project_name = var.project_name
+	schedule_time  = var.schedule_time
+
+	lambda_arn = module.lambda.lambda_arn
 }

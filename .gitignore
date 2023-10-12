@@ -6,3 +6,5 @@ __pycache__
 .terraform.lock.hcl
 terraform.tfstate.backup
 terraform.tfstate
+lambda_function_payload.zip
+rds_address.txt

@@ -19,6 +19,12 @@ variable "bucket_names" {
   description = "Lista de buckets para as camadas de dados"
 }
 
+variable "schedule_time" {
+  type        = string
+  description = "Tempo do agendador do EventBridge"
+}
+
+
 data "http" "myip" {
   url = "http://ipv4.icanhazip.com"
 }
