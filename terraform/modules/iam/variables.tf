@@ -3,9 +3,24 @@ variable "project_name" {
   description = "Nome do Projeto"
 }
 
-variable "bucket_name" {
+variable "bucket_raw" {
   type        = string
-  description =  "Bucket a ser inserido na política IAM"
+  description =  "Bucket da camada raw a ser inserido na política IAM"
+}
+
+variable "bucket_processed" {
+  type        = string
+  description =  "Bucket da camada processed a ser inserido na política IAM"
+}
+
+variable "bucket_curated" {
+  type        = string
+  description =  "Bucket da camada curated a ser inserido na política IAM"
+}
+
+variable "bucket_emr" {
+  type        = string
+  description =  "Bucket com arquivos do job EMR a ser inserido na política IAM"
 }
 
 

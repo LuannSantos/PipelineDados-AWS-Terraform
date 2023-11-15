@@ -12,7 +12,7 @@ terraform {
     encrypt = true
     bucket  = "terraform-project-9093"
     key     = "terraform-project-9093.tfstate"
-    region  = "us-east-1"
+    region  = "us-west-1"
 
     dynamodb_table = "terraform-locks"
   }

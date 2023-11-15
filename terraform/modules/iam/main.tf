@@ -14,7 +14,7 @@ resource "aws_iam_policy" "s3-policy" {
                 "s3:PutObjectTagging"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.bucket_name}/*"
+                "arn:aws:s3:::${var.bucket_raw}/*"
             ]
         },
         {
@@ -23,7 +23,7 @@ resource "aws_iam_policy" "s3-policy" {
                 "s3:ListBucket"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.bucket_name}"
+                "arn:aws:s3:::${var.bucket_raw}"
             ]
         }
     ]
@@ -77,7 +77,7 @@ resource "aws_iam_policy" "dms-lambda-policy" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": "logs:CreateLogGroup",
-            "Resource": "arn:aws:logs:us-east-1:*:*"
+            "Resource": "arn:aws:logs:*:*:*"
         },
         {
             "Sid": "VisualEditor1",
@@ -86,7 +86,7 @@ resource "aws_iam_policy" "dms-lambda-policy" {
                 "logs:CreateLogStream",
                 "logs:PutLogEvents"
             ],
-            "Resource": "arn:aws:logs:us-east-1:*:log-group:/aws/lambda/${var.project_name}-lambda-dms:*"
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/lambda/${var.project_name}-lambda-dms:*"
         }
     ]
 }
@@ -119,3 +119,58 @@ EOF
 
 }
 
+
+resource "aws_iam_role" "iam_emr_access_role" {
+  name = "${var.project_name}-iam_emr_access_role"
+
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
+  ]
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "elasticmapreduce.amazonaws.com"
+            }
+        }
+    ]
+}
+EOF
+
+
+}
+
+resource "aws_iam_role" "iam_ec2_emr_access_role" {
+  name = "${var.project_name}-iam_ec2_emr_access_role"
+
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceforEC2Role"
+  ]
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ec2.amazonaws.com"
+            }
+        }
+    ]
+}
+EOF
+
+
+}
+
+resource "aws_iam_instance_profile" "emr_profile" {
+  name = "${var.project_name}-emr_profile"
+  role = aws_iam_role.iam_ec2_emr_access_role.name
+}
