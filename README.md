@@ -20,6 +20,8 @@ Os dados vem da API do tabnews. A documentação pode ser conferida no seguinte 
 
 Toda a infraestrtutura fica na AWS e é criada no Terraform. O pipeline de dados funciona seguindo a arquitetura a seguir:
 
+<img src="./imgs/ProjectArchitecture.png">
+
 Na primeira parte, um programa python, que fica em uma máquina fora da AWS, realiza extrações de dados da API. O código extrai dados de cada página e a cada iteração, um conjunto de registros é salvo no banco de dados PostgreSQL no AWS RDS. Esse programa é executado de forma agendada usando a biblioteca schedule do Python.
 
 Os registros armazenados no banco de dados relacional são transferidos para a camada raw do AWS S3 através do AWS DMS. Esse serviço foi configurado com dois endpoints: o AWS RDS como fonte e o AWS S3 como destino. Além das colunas existentes, o DMS acrescenta mais uma coluna que é o TIMESTAMP que está relacionado a data de transferência do registro do RDS para o S3.
